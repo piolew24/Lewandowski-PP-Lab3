@@ -42,14 +42,6 @@ class TennisGame2:
             + self._point_to_text(self.p2_points)
         )
 
-    def set_p1_score(self, number):
-        for _ in range(number):
-            self.p1_score()
-
-    def set_p2_score(self, number):
-        for _ in range(number):
-            self.p2_score()
-
     def p1_score(self):
         self.p1_points += 1
 
