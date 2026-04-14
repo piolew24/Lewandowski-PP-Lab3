@@ -2,8 +2,8 @@ class TennisGame2:
     def __init__(self, player1_name, player2_name):
         self.player1_name = player1_name
         self.player2_name = player2_name
-        self.p1points = 0
-        self.p2points = 0
+        self.p1_points = 0
+        self.p2_points = 0
 
     def won_point(self, player_name):
         if player_name == "player1":
@@ -12,92 +12,46 @@ class TennisGame2:
             self.p2_score()
 
     def score(self):
-        result = ""
-        if self.p1points == self.p2points and self.p1points < 3:
-            if self.p1points == 0:
-                result = "Love"
-            if self.p1points == 1:
-                result = "Fifteen"
-            if self.p1points == 2:
-                result = "Thirty"
-            result += "-All"
-        if self.p1points == self.p2points and self.p1points > 2:
-            result = "Deuce"
+        if self.p1_points == self.p2_points:
+            return self._equal_score()
 
-        p1res = ""
-        p2res = ""
-        if self.p1points > 0 and self.p2points == 0:
-            if self.p1points == 1:
-                p1res = "Fifteen"
-            if self.p1points == 2:
-                p1res = "Thirty"
-            if self.p1points == 3:
-                p1res = "Forty"
+        if self.p1_points >= 4 or self.p2_points >= 4:
+            return self._late_game_score()
 
-            p2res = "Love"
-            result = p1res + "-" + p2res
-        if self.p2points > 0 and self.p1points == 0:
-            if self.p2points == 1:
-                p2res = "Fifteen"
-            if self.p2points == 2:
-                p2res = "Thirty"
-            if self.p2points == 3:
-                p2res = "Forty"
+        return self._normal_score()
 
-            p1res = "Love"
-            result = p1res + "-" + p2res
+    def _point_to_text(self, points):
+        names = ("Love", "Fifteen", "Thirty", "Forty")
+        return names[points]
 
-        if self.p1points > self.p2points and self.p1points < 4:
-            if self.p1points == 2:
-                p1res = "Thirty"
-            if self.p1points == 3:
-                p1res = "Forty"
-            if self.p2points == 1:
-                p2res = "Fifteen"
-            if self.p2points == 2:
-                p2res = "Thirty"
-            result = p1res + "-" + p2res
-        if self.p2points > self.p1points and self.p2points < 4:
-            if self.p2points == 2:
-                p2res = "Thirty"
-            if self.p2points == 3:
-                p2res = "Forty"
-            if self.p1points == 1:
-                p1res = "Fifteen"
-            if self.p1points == 2:
-                p1res = "Thirty"
-            result = p1res + "-" + p2res
+    def _equal_score(self):
+        if self.p1_points < 3:
+            return self._point_to_text(self.p1_points) + "-All"
+        return "Deuce"
 
-        if self.p1points > self.p2points and self.p2points >= 3:
-            result = "Advantage player1"
+    def _late_game_score(self):
+        diff = self.p1_points - self.p2_points
+        if abs(diff) == 1:
+            return "Advantage player1" if diff > 0 else "Advantage player2"
+        return "Win for player1" if diff > 0 else "Win for player2"
 
-        if self.p2points > self.p1points and self.p1points >= 3:
-            result = "Advantage player2"
-
-        if (
-            self.p1points >= 4
-            and self.p2points >= 0
-            and (self.p1points - self.p2points) >= 2
-        ):
-            result = "Win for player1"
-        if (
-            self.p2points >= 4
-            and self.p1points >= 0
-            and (self.p2points - self.p1points) >= 2
-        ):
-            result = "Win for player2"
-        return result
+    def _normal_score(self):
+        return (
+            self._point_to_text(self.p1_points)
+            + "-"
+            + self._point_to_text(self.p2_points)
+        )
 
     def set_p1_score(self, number):
-        for i in range(number):
+        for _ in range(number):
             self.p1_score()
 
     def set_p2_score(self, number):
-        for i in range(number):
+        for _ in range(number):
             self.p2_score()
 
     def p1_score(self):
-        self.p1points += 1
+        self.p1_points += 1
 
     def p2_score(self):
-        self.p2points += 1
+        self.p2_points += 1
